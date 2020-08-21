@@ -40,11 +40,17 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class App {
 
+    String fileName;
+
+    public App(String fileName) {
+        this.fileName = fileName;
+    }
+
     //void read excel file
     List<UserModel> getUserModels() {
         FileInputStream fis = null;
         try {
-            fis = new FileInputStream(new File("uploads/users.xlsx"));
+            fis = new FileInputStream(new File(getFileName()));
             XSSFWorkbook wb = new XSSFWorkbook(fis);
             XSSFSheet sheet = wb.getSheetAt(0);
             Iterator<Row> itr = sheet.iterator();
@@ -122,12 +128,16 @@ public class App {
         }
     }
 
+    public String getFileName() {
+        return fileName;
+    }
+
     /*
     Test read excel and insert files to db
      */
     public static void main(String[] args) {
-        List<UserModel> l = new App().getUserModels();
+        List<UserModel> l = new App("uploads/users.xlsx").getUserModels();
         System.out.println(l.size());
-        new App().saveRecords(l);
+        new App("uploads/users.xlsx").saveRecords(l);
     }
 }
