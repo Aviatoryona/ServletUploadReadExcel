@@ -49,7 +49,7 @@ public class App {
 
     //
     public void saveData() {
-
+        saveRecords(getUserModels());
     }
 
     //void read excel file
