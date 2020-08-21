@@ -5,6 +5,7 @@
  */
 package dev.yonathaniel.servetuploadreadexcel;
 
+import dev.yonathaniel.servetuploadreadexcel.db.DbConnection;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
@@ -28,11 +29,13 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 @WebServlet(name = "FileHandler", urlPatterns = {"/FileHandler"})
 public class FileHandler extends HttpServlet {
 
+    DbConnection dbConnection;
     String path;
 
     @Override
     public void init() throws ServletException {
         path = getServletContext().getInitParameter("file-upload");
+        dbConnection = (DbConnection) getServletContext().getAttribute("dbConnection");
         File f = new File("uploads");
         if (!f.exists()) {
             System.out.println("");
@@ -100,6 +103,7 @@ public class FileHandler extends HttpServlet {
             }
             if (file != null) {
                 response.getWriter().write(file.getName());
+                new App(file.getName(), dbConnection).saveData();
             }
         } catch (FileUploadException ex) {
             Logger.getLogger(FileHandler.class.getName()).log(Level.SEVERE, null, ex);

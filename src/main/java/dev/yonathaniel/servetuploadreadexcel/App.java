@@ -42,12 +42,18 @@ public class App {
 
     String fileName;
 
-    public App(String fileName) {
+    public App(String fileName, DbConnection dbConnection) {
         this.fileName = fileName;
+        this.dbConnection = dbConnection;
+    }
+
+    //
+    public void saveData() {
+
     }
 
     //void read excel file
-    List<UserModel> getUserModels() {
+    private List<UserModel> getUserModels() {
         FileInputStream fis = null;
         try {
             fis = new FileInputStream(new File(getFileName()));
@@ -81,7 +87,6 @@ public class App {
         } finally {
             try {
                 fis.close();
-
             } catch (IOException ex) {
                 Logger.getLogger(App.class
                         .getName()).log(Level.SEVERE, null, ex);
@@ -93,9 +98,11 @@ public class App {
     //
     DbConnection dbConnection;
 
-    void saveRecords(List<UserModel> lists) {
+    private void saveRecords(List<UserModel> lists) {
         try {
-            dbConnection = DbConnection.getInstance();
+            if (dbConnection == null) {
+                dbConnection = DbConnection.getInstance();
+            }
             if (lists == null) {
                 return;
             }
@@ -136,8 +143,8 @@ public class App {
     Test read excel and insert files to db
      */
     public static void main(String[] args) {
-        List<UserModel> l = new App("uploads/users.xlsx").getUserModels();
+        List<UserModel> l = new App("uploads/users.xlsx", null).getUserModels();
         System.out.println(l.size());
-        new App("uploads/users.xlsx").saveRecords(l);
+        new App("uploads/users.xlsx", null).saveRecords(l);
     }
 }
