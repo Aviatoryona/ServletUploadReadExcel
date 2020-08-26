@@ -18,6 +18,7 @@
 package dev.yonathaniel.servetuploadreadexcel;
 
 import dev.yonathaniel.servetuploadreadexcel.db.DbConnection;
+import java.io.File;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,6 +42,13 @@ public class DbInitListener implements ServletContextListener {
             ServletContext context = sce.getServletContext();
             dbConnection = DbConnection.getInstance();
             context.setAttribute("dbConnection", dbConnection);
+
+            File f = new File("uploads");
+            if (!f.exists()) {
+                System.out.println("");
+                f.mkdirs();
+            }
+
         } catch (SQLException ex) {
             Logger.getLogger(DbInitListener.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
